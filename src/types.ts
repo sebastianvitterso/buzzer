@@ -22,6 +22,11 @@ export type LobbyResponse = {
   lobby: Lobby
 }
 
+export type ErrorResponse = {
+  type: 'error'
+  message: string
+}
+
 export type CreateLobbyRequest = {
   type: 'create_lobby_request'
   playerName: string

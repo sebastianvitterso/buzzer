@@ -6,8 +6,13 @@ import type { BuzzerAPI } from '../hooks/useBuzzerAPI'
 export default function Menu({ createLobby, joinLobby }: BuzzerAPI) {
   const [createLobbyUserName, setCreateLobbyUserName] = useState('')
 
-  const [joinLobbyId, setJoinLobbyId] = useState('')
+  const [joinLobbyId, _setJoinLobbyId] = useState('')
   const [joinLobbyUserName, setJoinLobbyUserName] = useState('')
+
+  function setJoinLobbyId(value: string) {
+    // uppercase and remove spaces
+    _setJoinLobbyId(value.toUpperCase().replace(/\s+/g, ''))
+  }
 
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center p-16 gap-16">

@@ -33,7 +33,7 @@ export default function Game({ buzz, reset, player, lobby }: BuzzerAPI) {
     // get second diff between every buzz and first buzz
     const buzzDiffs = sortedBuzzes.map((buzz) => {
       const buzzTime = new Date(buzz.time)
-      return Math.floor((buzzTime.getTime() - firstBuzzTime.getTime()) / 1000)
+      return (buzzTime.getTime() - firstBuzzTime.getTime()) / 1000
     })
 
     return sortedBuzzes.map((buzz, index) => [buzz.player, buzzDiffs[index]] as [Player, number])
@@ -50,7 +50,7 @@ export default function Game({ buzz, reset, player, lobby }: BuzzerAPI) {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center p-16 gap-12">
       <h1 className="text-4xl font-black">Buzzer Game</h1>
-      <p>Lobby code: {lobby?.id ?? '-'}</p>
+      <p>Lobby code: {lobby?.id?.toLocaleUpperCase() ?? '-'}</p>
       <Buzzer onBuzz={buzz} state={getBuzzerState()} />
 
       <div className="flex flex-col gap-3">
