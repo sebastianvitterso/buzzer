@@ -11,7 +11,13 @@ export default function Buzzer({ state, onBuzz }: BuzzerProps) {
       type="button"
       onClick={onBuzz}
       disabled={state !== 'ready'}
-      className="h-40 w-40 rounded-full bg-blue-500 text-white text-2xl disabled:bg-gray-400 hover:opacity-90 disabled:hover:opacity-100 cursor-pointer disabled:cursor-not-allowed"
+      className={`
+        size-40 md:size-60 lg:size-80 rounded-full
+        text-white text-2xl md:text-3xl lg:text-4xl font-bold
+        bg-blue-500 disabled:bg-gray-400
+        enabled:hover:opacity-90
+        cursor-pointer disabled:cursor-not-allowed
+      `}
       style={{}}
     >
       Buzz

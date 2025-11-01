@@ -19,8 +19,10 @@ export default function Menu({ createLobby, joinLobby }: BuzzerAPI) {
       <h1 className="text-5xl font-black">Buzzer Game</h1>
       <div className="w-full h-screen flex flex-col md:flex-row gap-12 md:justify-around items-center">
         <div className="flex flex-col justify-center gap-4">
-          <h2 className="text-2xl font-bold">Create lobby</h2>
-          <label htmlFor="create-lobby-username">Username</label>
+          <h2 className="text-2xl font-bold">Create new lobby</h2>
+          <label htmlFor="create-lobby-username">
+            Username <span className="text-gray-500 text-xs">(leave empty for hidden buzzer)</span>
+          </label>
           <TextField
             id="create-lobby-username"
             placeholder="Enter your name"

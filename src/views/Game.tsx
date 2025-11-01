@@ -42,33 +42,54 @@ export default function Game({ buzz, reset, player, lobby }: BuzzerAPI) {
   function getWaitingPlayerList(): Player[] {
     if (!lobby || !player) return []
     const buzzedPlayerIds = lobby.buzzes.map((buzz) => buzz.player.id)
-    return lobby.players
-      .toSorted((a, b) => a.name.localeCompare(b.name))
-      .filter((p) => !buzzedPlayerIds.includes(p.id))
+    return (
+      lobby.players
+        .toSorted((a, b) => a.name.localeCompare(b.name))
+        .filter((p) => !buzzedPlayerIds.includes(p.id))
+        // hide admin player if they don't have a name
+        .filter((p) => !(p.id === lobby.adminPlayerId && p.name.trim().length === 0))
+    )
   }
+
+  const showBuzzer = player?.name.trim().length !== 0
+  const noVisiblePlayers = !showBuzzer && lobby?.players.length === 1
 
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center p-16 gap-12">
-      <h1 className="text-4xl font-black">Buzzer Game</h1>
-      <p>Lobby code: {lobby?.id?.toLocaleUpperCase() ?? '-'}</p>
-      <Buzzer onBuzz={buzz} state={getBuzzerState()} />
+      <p className="text-xl">
+        Lobby code: <span className="font-bold">{lobby?.id?.toLocaleUpperCase() ?? '-'}</span>
+      </p>
+      {showBuzzer && <Buzzer onBuzz={buzz} state={getBuzzerState()} />}
 
       <div className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">Players:</h2>
+        {noVisiblePlayers && <p className="italic text-gray-700">No players have joined yet...</p>}
         {getBuzzedPlayerList().map(([p, diff], index) => (
           <p key={p.id} className="flex justify-between w-64 font-bold">
-            <span>{p.name}</span>
+            <span>
+              {p.name}{' '}
+              {p.id === player?.id ? (
+                <span className="text-xs italic text-gray-500">(You)</span>
+              ) : null}
+            </span>
             <span>{index === 0 ? <span>🏆</span> : `+${diff.toFixed(1)}s`}</span>
           </p>
         ))}
         {getWaitingPlayerList().map((p) => (
           <p key={p.id} className="w-64">
-            {p.name}
+            {p.name}{' '}
+            {p.id === player?.id ? (
+              <span className="text-xs italic text-gray-700">(You)</span>
+            ) : null}
           </p>
         ))}
       </div>
 
-      {isAdmin() && <Button onClick={reset}>Reset buzzer</Button>}
+      {isAdmin() && (
+        <Button onClick={reset} disabled={lobby?.buzzes.length === 0}>
+          Reset buzzer
+        </Button>
+      )}
     </div>
   )
 }
