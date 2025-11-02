@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 import type { ErrorResponse, Lobby, LobbyResponse, Player } from '../types'
 import usePreviousValue from './usePreviousValue'
+import useQueryParameter from './useQueryParameter'
 
 export type BuzzerAPI = {
   createLobby: (playerName: string) => void
@@ -46,7 +47,31 @@ export function useBuzzerAPI() {
   const previousReadyState = usePreviousValue(readyState)
 
   const [player, setPlayer] = useState<Player | null>(null)
+  const [playerQueryParam, setPlayerQueryParam] = useQueryParameter('player')
   const [lobby, setLobby] = useState<Lobby | null>(null)
+  const [lobbyQueryParam, setLobbyQueryParam] = useQueryParameter('lobby')
+
+  useEffect(() => {
+    if (player?.id) {
+      setPlayerQueryParam(player.id)
+    } else {
+      setPlayerQueryParam('')
+    }
+  }, [player, setPlayerQueryParam])
+
+  useEffect(() => {
+    if (lobby?.id) {
+      setLobbyQueryParam(lobby.id)
+    } else {
+      setLobbyQueryParam('')
+    }
+  }, [lobby, setLobbyQueryParam])
+
+  useEffect(() => {
+    if (playerQueryParam && lobbyQueryParam && !lobby) {
+      reconnectToLobby(lobbyQueryParam, playerQueryParam)
+    }
+  }, [playerQueryParam, lobbyQueryParam, lobby])
 
   const onWebsocketJsonMessage = useCallback(
     (message: LobbyResponse | ErrorResponse) => {

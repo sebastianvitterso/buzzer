@@ -56,6 +56,9 @@ export default function Game({ buzz, reset, player, lobby }: BuzzerAPI) {
 
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center p-16 gap-12">
+      <a href="/" className="text-shadow-blue-300 underline -mb-8 text-sm italic">
+        &larr; Leave lobby
+      </a>
       <p className="text-xl">
         Lobby code: <span className="font-bold">{lobby?.id?.toLocaleUpperCase() ?? '-'}</span>
       </p>
