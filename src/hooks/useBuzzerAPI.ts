@@ -109,6 +109,10 @@ export function useBuzzerAPI() {
   }
 
   function joinLobby(lobbyId: string, playerName: string) {
+    if (playerName.trim() === '') {
+      addDebugMessage('Lobby joining failed: Player name is empty')
+      return
+    }
     addDebugMessage(`Joining lobby ${lobbyId} as player ${playerName}`)
     sendJsonMessage({ type: 'join_lobby_request', lobbyId, playerName })
   }
